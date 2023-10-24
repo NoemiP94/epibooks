@@ -4,13 +4,22 @@ import MyNav from './components/MyNav'
 import MyFooter from './components/MyFooter'
 import Welcome from './components/Welcome'
 import AllTheBooks from './components/AllTheBooks'
+import fantasy from './data/fantasy.json'
+import history from './data/history.json'
+import horror from './data/horror.json'
+import romance from './data/romance.json'
+import scifi from './data/scifi.json'
 
 function App() {
   return (
     <div>
       <MyNav />
       <Welcome />
-      <AllTheBooks />
+      <AllTheBooks genre={fantasy} />
+      <AllTheBooks genre={history} />
+      <AllTheBooks genre={horror} />
+      <AllTheBooks genre={romance} />
+      <AllTheBooks genre={scifi} />
       <MyFooter />
     </div>
   )
