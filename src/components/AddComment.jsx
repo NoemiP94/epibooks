@@ -1,22 +1,13 @@
 import { Component } from 'react'
-import { Form, Button, Container, Row, Col } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 
 class AddComment extends Component {
   state = {
     reviews: {
       comment: '',
-      rate: '',
-      elementId: '',
+      rate: '1',
+      elementId: this.props.bookId,
     },
-  }
-
-  handleInputChange = (property, value) => {
-    this.setState({
-      review: {
-        ...this.state.reviews,
-        [property]: value,
-      },
-    })
   }
 
   handleFormSubmit = async (e) => {
@@ -24,7 +15,7 @@ class AddComment extends Component {
     console.log('Invio commento')
     try {
       const res = await fetch(
-        'https://striveschool-api.herokuapp.com/api/comments/:elementId',
+        'https://striveschool-api.herokuapp.com/api/comments/',
         {
           method: 'POST',
           body: JSON.stringify(this.state.reviews),
@@ -36,13 +27,7 @@ class AddComment extends Component {
         }
       )
       if (res.ok) {
-        this.setState({
-          reviews: {
-            comment: '',
-            rate: '',
-            elementId: '',
-          },
-        })
+        alert('commento salvato!')
       } else {
         throw new Error("C'è stato un errore nel salvataggio del commento")
       }
@@ -53,54 +38,48 @@ class AddComment extends Component {
 
   render() {
     return (
-      <Container>
-        <Row className="justify-content-center">
-          <Col md={6}>
-            <h5 className="text-center">Inserisci il tuo commmento</h5>
-            <Form>
-              <Form.Group className="mb-3">
-                <Form.Label>Scrivi il tuo commento:</Form.Label>
-                <Form.Control
-                  type="text"
-                  required
-                  value={this.state.reviews.comment}
-                  onChange={(e) => {
-                    this.setState({
-                      reviews: {
-                        ...this.state.reviews,
-                        comment: e.target.value,
-                      },
-                    })
-                  }}
-                />
-              </Form.Group>
-              <Form.Select
-                required
-                value={this.state.reviews.rate}
-                onChange={(e) => {
-                  this.setState({
-                    reviews: {
-                      ...this.state.reviews,
-                      rate: e.target.value,
-                    },
-                  })
-                }}
-              >
-                <option>Come valuteresti questo libro?</option>
-                <option>1</option>
-                <option>1</option>
-                <option>3</option>
-                <option>4</option>
-                <option>4</option>
-              </Form.Select>
+      <Form onSubmit={this.handleFormSubmit}>
+        <h5 className="text-center">Inserisci il tuo commmento</h5>
+        <Form.Group className="mb-3">
+          <Form.Label>Scrivi il tuo commento:</Form.Label>
+          <Form.Control
+            type="text"
+            required
+            value={this.state.reviews.comment}
+            onChange={(e) => {
+              this.setState({
+                reviews: {
+                  ...this.state.reviews,
+                  comment: e.target.value,
+                },
+              })
+            }}
+          />
+        </Form.Group>
+        <Form.Label>Come valuti questo libro?</Form.Label>
+        <Form.Select
+          aria-label="comment rating"
+          value={this.state.reviews.rate}
+          onChange={(e) => {
+            this.setState({
+              reviews: {
+                ...this.state.reviews,
+                rate: e.target.value,
+              },
+            })
+          }}
+        >
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </Form.Select>
 
-              <Button variant="primary" type="submit">
-                Invia
-              </Button>
-            </Form>
-          </Col>
-        </Row>
-      </Container>
+        <Button variant="primary" type="submit">
+          Invia
+        </Button>
+      </Form>
     )
   }
 }
