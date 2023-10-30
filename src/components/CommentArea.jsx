@@ -37,8 +37,16 @@ class CommentArea extends Component {
       })
   }
 
-  componentDidMount() {
-    this.getComments()
+  // componentDidMount() {
+  //   if (this.props.bookId) {
+  //     this.getComments()
+  //   }
+  // }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.bookId !== this.props.bookId) {
+      this.getComments()
+    }
   }
 
   render() {
