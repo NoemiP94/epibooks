@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 
 const AddComment = (props) => {
@@ -15,6 +15,13 @@ const AddComment = (props) => {
     rate: '1',
     elementId: props.bookId,
   })
+
+  useEffect(() => {
+    setReviews({
+      ...reviews,
+      elementId: props.bookId,
+    })
+  }, [props.bookId])
 
   const handleFormSubmit = async (e) => {
     e.preventDefault()
