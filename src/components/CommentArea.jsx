@@ -1,17 +1,14 @@
-import { Component } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import CommentList from './CommentList'
 import AddComment from './AddComment'
+import { useState, useEffect } from 'react'
 
-class CommentArea extends Component {
-  state = {
-    comments: [],
-  }
+const CommentArea = (props) => {
+  const [comments, setComments] = useState([])
 
-  getComments = () => {
+  const getComments = () => {
     fetch(
-      'https://striveschool-api.herokuapp.com/api/comments/' +
-        this.props.bookId,
+      'https://striveschool-api.herokuapp.com/api/comments/' + props.bookId,
       {
         headers: {
           Authorization:
@@ -28,40 +25,28 @@ class CommentArea extends Component {
       })
       .then((data) => {
         console.log('fetch completata, dati recuperati', data)
-        this.setState({
-          comments: data,
-        })
+        setComments(data)
       })
       .catch((error) => {
         console.log('Error!', error)
       })
   }
 
-  // componentDidMount() {
-  //   if (this.props.bookId) {
-  //     this.getComments()
-  //   }
-  // }
+  useEffect(() => {
+    getComments()
+  }, [props.bookId])
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.bookId !== this.props.bookId) {
-      this.getComments()
-    }
-  }
-
-  render() {
-    return (
-      <Container>
-        <Row>
-          <Col>
-            <h5>Cosa si dice di questo libro:</h5>
-            <CommentList reviews={this.state.comments} />
-            <AddComment bookId={this.props.bookId} />
-          </Col>
-        </Row>
-      </Container>
-    )
-  }
+  return (
+    <Container>
+      <Row>
+        <Col>
+          <h5>Cosa si dice di questo libro:</h5>
+          <CommentList reviews={comments} />
+          <AddComment bookId={props.bookId} />
+        </Col>
+      </Row>
+    </Container>
+  )
 }
 
 export default CommentArea

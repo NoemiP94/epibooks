@@ -2,68 +2,69 @@ import SingleBook from './SingleBook'
 import { Container } from 'react-bootstrap'
 import { Row } from 'react-bootstrap'
 import { Col } from 'react-bootstrap'
-import { Component } from 'react'
 import { Form } from 'react-bootstrap'
 import CommentArea from './CommentArea'
+import { useState } from 'react'
 
-class BookList extends Component {
-  state = {
-    searchValue: '',
-    selectedAsin: null,
+const BookList = (props) => {
+  // state = {
+  //   searchValue: '',
+  //   selectedAsin: null,
+  // }
+
+  const [searchValue, setSearchValue] = useState('')
+  const [selectedAsin, setSelectedAsin] = useState(null)
+
+  const changeAsin = (newAsin) => {
+    // this.setState({
+    //   selectedAsin: newAsin,
+    // })
+    setSelectedAsin(newAsin)
   }
 
-  changeAsin = (newAsin) => {
-    this.setState({
-      selectedAsin: newAsin,
-    })
-  }
-
-  render() {
-    return (
-      <Container>
-        <Row className="justify-content-center">
-          <Col md={6}>
-            <Form.Group className="mb-3">
-              <Form.Control
-                type="text"
-                placeholder="Cerca un libro..."
-                value={this.state.searchValue}
-                onChange={(e) => {
-                  this.setState({ searchValue: e.target.value })
-                }}
-              />
-            </Form.Group>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6}>
-            <Row>
-              {this.props.manyBooks
-                .filter((oneBook) =>
-                  oneBook.title
-                    .toLowerCase()
-                    .includes(this.state.searchValue.toLowerCase())
+  return (
+    <Container>
+      <Row className="justify-content-center">
+        <Col md={6}>
+          <Form.Group className="mb-3">
+            <Form.Control
+              type="text"
+              placeholder="Cerca un libro..."
+              value={searchValue}
+              onChange={(e) => {
+                setSearchValue(e.target.value)
+                // this.setState({ searchValue: e.target.value })
+              }}
+            />
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col md={6}>
+          <Row>
+            {props.manyBooks
+              .filter((oneBook) =>
+                oneBook.title.toLowerCase().includes(searchValue.toLowerCase())
+              )
+              .map((oneBook) => {
+                return (
+                  <Col md={3} key={oneBook.asin}>
+                    <SingleBook
+                      book={oneBook}
+                      changeAsin={changeAsin}
+                      selectedAsin={selectedAsin}
+                    />
+                  </Col>
                 )
-                .map((oneBook) => {
-                  return (
-                    <Col md={3} key={oneBook.asin}>
-                      <SingleBook
-                        book={oneBook}
-                        changeAsin={this.changeAsin}
-                        selectedAsin={this.state.selectedAsin}
-                      />
-                    </Col>
-                  )
-                })}
-            </Row>
-          </Col>
-          <Col md={6}>
-            <CommentArea bookId={this.state.selectedAsin} />
-          </Col>
-        </Row>
-      </Container>
-    )
-  }
+              })}
+          </Row>
+        </Col>
+        <Col md={6}>
+          <CommentArea bookId={selectedAsin} />
+        </Col>
+      </Row>
+    </Container>
+  )
 }
 
 export default BookList

@@ -1,16 +1,22 @@
-import { Component } from 'react'
+import { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 
-class AddComment extends Component {
-  state = {
-    reviews: {
-      comment: '',
-      rate: '1',
-      elementId: this.props.bookId,
-    },
-  }
+const AddComment = () => {
+  // state = {
+  //   reviews: {
+  //     comment: '',
+  //     rate: '1',
+  //     elementId: this.props.bookId,
+  //   },
+  // }
 
-  handleFormSubmit = async (e) => {
+  const [reviews, setReviews] = useState({
+    comment: '',
+    rate: '1',
+    elementId: this.props.bookId,
+  })
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault()
     console.log('Invio commento')
     try {
@@ -18,7 +24,7 @@ class AddComment extends Component {
         'https://striveschool-api.herokuapp.com/api/comments/',
         {
           method: 'POST',
-          body: JSON.stringify(this.state.reviews),
+          body: JSON.stringify(reviews),
           headers: {
             'Content-Type': 'application/json',
             Authorization:
@@ -36,51 +42,57 @@ class AddComment extends Component {
     }
   }
 
-  render() {
-    return (
-      <Form onSubmit={this.handleFormSubmit}>
-        <h5 className="text-center">Inserisci il tuo commmento</h5>
-        <Form.Group className="mb-3">
-          <Form.Label>Scrivi il tuo commento:</Form.Label>
-          <Form.Control
-            type="text"
-            required
-            value={this.state.reviews.comment}
-            onChange={(e) => {
-              this.setState({
-                reviews: {
-                  ...this.state.reviews,
-                  comment: e.target.value,
-                },
-              })
-            }}
-          />
-        </Form.Group>
-        <Form.Label>Come valuti questo libro?</Form.Label>
-        <Form.Select
-          aria-label="comment rating"
-          value={this.state.reviews.rate}
+  return (
+    <Form onSubmit={handleFormSubmit}>
+      <h5 className="text-center">Inserisci il tuo commmento</h5>
+      <Form.Group className="mb-3">
+        <Form.Label>Scrivi il tuo commento:</Form.Label>
+        <Form.Control
+          type="text"
+          required
+          value={reviews.comment}
           onChange={(e) => {
-            this.setState({
-              reviews: {
-                ...this.state.reviews,
-                rate: e.target.value,
-              },
+            // this.setState({
+            //   reviews: {
+            //     ...reviews,
+            //     comment: e.target.value,
+            //   },
+            // })
+            setReviews({
+              ...reviews,
+              comment: e.target.value,
             })
           }}
-        >
-          <option>1</option>
-          <option>2</option>
-          <option>3</option>
-          <option>4</option>
-          <option>5</option>
-        </Form.Select>
+        />
+      </Form.Group>
+      <Form.Label>Come valuti questo libro?</Form.Label>
+      <Form.Select
+        aria-label="comment rating"
+        value={reviews.rate}
+        onChange={(e) => {
+          // this.setState({
+          //   reviews: {
+          //     ...reviews,
+          //     rate: e.target.value,
+          //   },
+          // })
+          setReviews({
+            ...reviews,
+            rate: e.target.value,
+          })
+        }}
+      >
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </Form.Select>
 
-        <Button variant="primary" type="submit">
-          Invia
-        </Button>
-      </Form>
-    )
-  }
+      <Button variant="primary" type="submit">
+        Invia
+      </Button>
+    </Form>
+  )
 }
 export default AddComment

@@ -1,44 +1,41 @@
 import { Card } from 'react-bootstrap'
-import { Component } from 'react'
+import { useState } from 'react'
 // import CommentArea from './CommentArea'
 
-class SingleBook extends Component {
-  state = {
-    selected: false,
+const SingleBook = (props) => {
+  // state = {
+  //   selected: false,
+  // }
+
+  const [selected, setSelected] = useState(false)
+
+  const toggleSelected = () => {
+    // this.setState({
+    //   selected: !this.state.selected,
+    // })
+
+    setSelected(!selected)
   }
 
-  toggleSelected = () => {
-    this.setState({
-      selected: !this.state.selected,
-    })
-  }
-  render() {
-    return (
-      // se viene selezionato il bordo diventa rosso
-      <Card
-        style={{
-          border:
-            this.props.book.asin === this.props.selectedAsin
-              ? '3px solid red'
-              : '',
-        }}
-        onClick={() => {
-          this.setState({ selected: !this.state.selected })
-          this.props.changeAsin(this.props.book.asin)
-        }}
-      >
-        <Card.Img
-          variant="top"
-          src={this.props.book.img}
-          onClick={this.toggleSelected}
-        />
-        <Card.Body>
-          <Card.Title>{this.props.book.title}</Card.Title>
-          {/* {this.state.selected && <CommentArea bookId={this.props.book.asin} />} */}
-        </Card.Body>
-      </Card>
-    )
-  }
+  return (
+    // se viene selezionato il bordo diventa rosso
+    <Card
+      style={{
+        border: props.book.asin === props.selectedAsin ? '3px solid red' : '',
+      }}
+      onClick={() => {
+        setSelected(!selected)
+        // this.setState({ selected: !this.state.selected })
+        props.changeAsin(props.book.asin)
+      }}
+    >
+      <Card.Img variant="top" src={props.book.img} onClick={toggleSelected} />
+      <Card.Body>
+        <Card.Title>{props.book.title}</Card.Title>
+        {/* {this.state.selected && <CommentArea bookId={this.props.book.asin} />} */}
+      </Card.Body>
+    </Card>
+  )
 }
 
 export default SingleBook
