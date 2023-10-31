@@ -33,7 +33,9 @@ const CommentArea = (props) => {
   }
 
   useEffect(() => {
-    getComments()
+    if (props.bookId) {
+      getComments()
+    }
   }, [props.bookId])
 
   return (

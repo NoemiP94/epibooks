@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
 
-const AddComment = () => {
+const AddComment = (props) => {
   // state = {
   //   reviews: {
   //     comment: '',
@@ -13,7 +13,7 @@ const AddComment = () => {
   const [reviews, setReviews] = useState({
     comment: '',
     rate: '1',
-    elementId: this.props.bookId,
+    elementId: props.bookId,
   })
 
   const handleFormSubmit = async (e) => {
